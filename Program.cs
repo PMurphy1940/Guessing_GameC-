@@ -7,10 +7,11 @@ namespace Guessing_Game
     {
         static void Main(string[] args)
         {
+            int theMagicNumber = SecretNumber();
             int tries = 1;
             Console.Clear();
             Console.WriteLine("Welcome to the Guessing Game!");
-            PlayTheGame(tries);
+            PlayTheGame(tries, theMagicNumber);
         }
 
         static int insultForWrongGuess()
@@ -19,7 +20,26 @@ namespace Guessing_Game
             return insult;
         }
 
-        static void PlayTheGame(int tries)
+        static int SecretNumber()
+        {
+            int secret = new Random().Next(1, 100);
+            return secret;
+        }
+
+        static string PlaysLeft(int tries, int allowed)
+        {
+            int plays = allowed - tries;
+            if (plays > 1)
+            {
+                return ($"You have {plays} attempts remaining.");
+            }
+            else
+            {
+                return ("This is your last shot!");
+            }
+        }
+
+        static void PlayTheGame(int tries, int theMagicNumber)
         {
             List<string> warnings = new List<string>
              {
@@ -29,19 +49,22 @@ namespace Guessing_Game
                  "Seriously, I' really though you'd do better."
             };
 
-            int insult = (tries - 1);
-
-
-            int secretNumber = 42;
-            int guess;
             int allowed = 4;
+            int insult = (tries - 1);
+            Console.WriteLine(theMagicNumber);
+
+            string lives = PlaysLeft(tries, allowed);
+
+            int guess;
+
+
             do
             {
                 guess = MakeAGuess();
             }
             while (guess < 1 || guess > 100);
 
-            if (guess == secretNumber)
+            if (guess == theMagicNumber)
             {
                 Console.WriteLine("You guessed it!");
             }
@@ -55,9 +78,19 @@ namespace Guessing_Game
                 Console.WriteLine($"{warnings[insult]}");
                 if (tries < allowed)
                 {
+                    if (guess < theMagicNumber)
+                    {
+                        Console.WriteLine("To Low!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("To High!");
+                    }
+
                     Console.WriteLine("Try Again");
+                    Console.WriteLine($"{lives}");
                     tries++;
-                    PlayTheGame(tries);
+                    PlayTheGame(tries, theMagicNumber);
                 }
                 else
                 {
