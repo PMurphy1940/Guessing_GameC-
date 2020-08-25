@@ -11,12 +11,14 @@ namespace Guessing_Game
             int tries = 1;
             Console.Clear();
             Console.WriteLine("Welcome to the Guessing Game!");
-            PlayTheGame(tries, theMagicNumber);
+            int allowed = Difficulty();
+            Console.Clear();
+            PlayTheGame(tries, theMagicNumber, allowed);
         }
 
-        static int insultForWrongGuess()
+        static int insultForWrongGuess(int numberOfWarnings)
         {
-            int insult = new Random().Next(0, 4);
+            int insult = new Random().Next(0, numberOfWarnings);
             return insult;
         }
 
@@ -38,18 +40,49 @@ namespace Guessing_Game
                 return ("This is your last shot!");
             }
         }
+        static int Difficulty()
+        {
+            string challenge;
+            do
+            {
+                Console.WriteLine("Choose your difficulty level");
+                Console.WriteLine("'E' - Easy");
+                Console.WriteLine("'M' - Medium");
+                Console.WriteLine("'H' - Hard");
+                challenge = Console.ReadLine().ToLower();
+            }
+            while (challenge != "e" && challenge != "m" && challenge != "h" && challenge != "cheat");
 
-        static void PlayTheGame(int tries, int theMagicNumber)
+            if (challenge == "e")
+            {
+                return 8;
+            }
+            else if (challenge == "m")
+            {
+                return 6;
+            }
+            else if (challenge == "h")
+            {
+                return 4;
+            }
+            else
+            {
+                return 10000;
+            }
+        }
+        static void PlayTheGame(int tries, int theMagicNumber, int allowed)
         {
             List<string> warnings = new List<string>
              {
                  "Sorry, that's not it",
                  "Wrong again",
                  "You're not very good at this, are you?",
-                 "Seriously, I' really though you'd do better."
+                 "Seriously, I' really though you'd do better.",
+                 "Wow, just wow.",
+                 "I think you had a better chance of getting it right if you hadn't even tried."
             };
+            int numberOfWarnings = warnings.Count;
 
-            int allowed = 4;
             int insult = (tries - 1);
             Console.WriteLine(theMagicNumber);
 
@@ -57,6 +90,12 @@ namespace Guessing_Game
 
             int guess;
 
+            string mode = "normal";
+
+            if (allowed == 10000)
+            {
+                mode = "cheat";
+            }
 
             do
             {
@@ -72,11 +111,11 @@ namespace Guessing_Game
             {
                 if (insult > 4)
                 {
-                    insult = insultForWrongGuess();
+                    insult = insultForWrongGuess(numberOfWarnings);
                 }
                 Console.Clear();
                 Console.WriteLine($"{warnings[insult]}");
-                if (tries < allowed)
+                if (tries < allowed && mode == "normal")
                 {
                     if (guess < theMagicNumber)
                     {
@@ -90,7 +129,23 @@ namespace Guessing_Game
                     Console.WriteLine("Try Again");
                     Console.WriteLine($"{lives}");
                     tries++;
-                    PlayTheGame(tries, theMagicNumber);
+                    PlayTheGame(tries, theMagicNumber, allowed);
+                }
+                else if (mode == "cheat")
+                {
+                    if (guess < theMagicNumber)
+                    {
+                        Console.WriteLine("To Low!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("To High!");
+                    }
+
+                    Console.WriteLine("Try Again");
+                    tries++;
+                    Console.WriteLine($"Cheat mode active. You have made {tries} attempts");
+                    PlayTheGame(tries, theMagicNumber, allowed);
                 }
                 else
                 {
@@ -117,6 +172,8 @@ namespace Guessing_Game
             return guess;
 
         }
+
+
 
 
     }
