@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Guessing_Game
 {
@@ -6,16 +7,34 @@ namespace Guessing_Game
     {
         static void Main(string[] args)
         {
+            int tries = 1;
+            Console.Clear();
             Console.WriteLine("Welcome to the Guessing Game!");
-            PlayTheGame();
+            PlayTheGame(tries);
         }
 
-
-
-        static void PlayTheGame()
+        static int insultForWrongGuess()
         {
+            int insult = new Random().Next(0, 4);
+            return insult;
+        }
+
+        static void PlayTheGame(int tries)
+        {
+            List<string> warnings = new List<string>
+             {
+                 "Sorry, that's not it",
+                 "Wrong again",
+                 "You're not very good at this, are you?",
+                 "Seriously, I' really though you'd do better."
+            };
+
+            int insult = (tries - 1);
+
+
             int secretNumber = 42;
             int guess;
+            int allowed = 4;
             do
             {
                 guess = MakeAGuess();
@@ -28,8 +47,23 @@ namespace Guessing_Game
             }
             else
             {
-                Console.WriteLine("WRONG!");
-                Console.WriteLine("Try Again");
+                if (insult > 4)
+                {
+                    insult = insultForWrongGuess();
+                }
+                Console.Clear();
+                Console.WriteLine($"{warnings[insult]}");
+                if (tries < allowed)
+                {
+                    Console.WriteLine("Try Again");
+                    tries++;
+                    PlayTheGame(tries);
+                }
+                else
+                {
+                    Console.WriteLine("Thanks for playing");
+                    Console.WriteLine("Please insert another quarter");
+                }
             }
 
         }
