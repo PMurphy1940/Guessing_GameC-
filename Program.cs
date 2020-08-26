@@ -77,14 +77,16 @@ namespace Guessing_Game
                  "Sorry, that's not it",
                  "Wrong again",
                  "You're not very good at this, are you?",
-                 "Seriously, I' really though you'd do better.",
+                 "Seriously, I really though you'd do better.",
                  "Wow, just wow.",
-                 "I think you had a better chance of getting it right if you hadn't even tried."
+                 "I think you had a better chance of getting it right if you hadn't even tried.",
+                 "A coconut stuck in a tidal pool could've guessed better.",
+                 "A head of lettuce has more brains than you.",
+                 "Sheesh! Why are we even doing this?"
             };
             int numberOfWarnings = warnings.Count;
 
             int insult = (tries - 1);
-            Console.WriteLine(theMagicNumber);
 
             string lives = PlaysLeft(tries, allowed);
 
@@ -114,7 +116,8 @@ namespace Guessing_Game
                     insult = insultForWrongGuess(numberOfWarnings);
                 }
                 Console.Clear();
-                Console.WriteLine($"{warnings[insult]}");
+                // Console.WriteLine($"{warnings[insult]}");
+                MooseSays(warnings[insult]);
                 if (tries < allowed && mode == "normal")
                 {
                     if (guess < theMagicNumber)
@@ -173,7 +176,37 @@ namespace Guessing_Game
 
         }
 
-
+        static void MooseSays(string message)
+        {
+            Console.WriteLine($@"
+                                      _.--^^^--,
+                                    .'          `\
+  .-^^^^^^-.                      .'              |
+ /          '.                   /            .-._/
+|             `.                |             |
+ \              \          .-._ |          _   \
+  `^^'-.         \_.-.     \   `          ( \__/
+        |             )     '=.       .,   \
+       /             (         \     /  \  /
+     /`               `\        |   /    `'
+     '..-`\        _.-. `\ _.__/   .=.
+          |  _    / \  '.-`    `-.'  /
+          \_/ |  |   './ _     _  \.'
+               '-'    | /       \ |
+                      |  .-. .-.  |
+                      \ / o| |o \ /
+                       |   / \   |    {message}
+                      / `^`   `^` \
+                     /             \
+                    | '._.'         \
+                    |  /             |
+                     \ |             |
+                      ||    _    _   /
+                      /|\  (_\  /_) /
+                      \ \'._  ` '_.'
+                       `^^` `^^^`
+    ");
+        }
 
 
     }
